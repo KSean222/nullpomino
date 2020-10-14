@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: mu.nu.nullpo.local:sdljava:LOCAL">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/mu/nu/nullpo/local/sdljava/LOCAL/sdljava-LOCAL.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/mu/nu/nullpo/local/sdljava/LOCAL/sdljava-LOCAL-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/mu/nu/nullpo/local/sdljava/LOCAL/sdljava-LOCAL-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

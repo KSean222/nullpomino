@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: mu.nu.nullpo.local:slick:LOCAL">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/mu/nu/nullpo/local/slick/LOCAL/slick-LOCAL.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/mu/nu/nullpo/local/slick/LOCAL/slick-LOCAL-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/mu/nu/nullpo/local/slick/LOCAL/slick-LOCAL-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

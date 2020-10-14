@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: mu.nu.nullpo.local:swing-layout-1.0.4:LOCAL">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/mu/nu/nullpo/local/swing-layout-1.0.4/LOCAL/swing-layout-1.0.4-LOCAL.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/mu/nu/nullpo/local/swing-layout-1.0.4/LOCAL/swing-layout-1.0.4-LOCAL-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/mu/nu/nullpo/local/swing-layout-1.0.4/LOCAL/swing-layout-1.0.4-LOCAL-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
