@@ -5,8 +5,7 @@ import com.sun.jna.Native;
 import com.sun.jna.Platform;
 
 public interface CCLib extends Library {
-    String DLL_PATH = "./cold_clear." + (Platform.isWindows() ? "dll" : "so");
-    CCLib INSTANCE = Native.load(DLL_PATH, CCLib.class);
+    CCLib INSTANCE = Native.load("cold_clear", CCLib.class);
 
     /** Launches a bot thread with a blank board, empty queue, and all seven pieces in the bag, using the
      * specified options and weights.
