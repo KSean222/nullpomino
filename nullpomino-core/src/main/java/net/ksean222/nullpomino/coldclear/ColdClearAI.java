@@ -8,22 +8,25 @@ import net.ksean222.nullpomino.coldclear.executors.*;
 import net.ksean222.nullpomino.coldclear.raw.*;
 import org.apache.log4j.Logger;
 
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.Queue;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class ColdClearAI extends DummyAI {
     private static final Logger log = Logger.getLogger(ColdClearAI.class);
     private static final CCPiece[] nullpoToCCPieceMap = new CCPiece[CCPiece.values().length];
+
     private CCAsyncBot bot;
     private boolean dead;
+
     private Queue<CCMovement> movements = new LinkedList<>();
-    private boolean hold = false;
     private MovementExecutor executor = null;
+    private boolean hold = false;
     private boolean hardDrop = false;
     private boolean hardDropPressed = false;
-    private int prevQueuePosition;
     private int delay = 0;
+    private List<boolean[]> expectedField = new ArrayList<>();
+
+    private int prevQueuePosition;
 
     static {
         nullpoToCCPieceMap[Piece.PIECE_I] = CCPiece.I;
@@ -33,6 +36,12 @@ public class ColdClearAI extends DummyAI {
         nullpoToCCPieceMap[Piece.PIECE_T] = CCPiece.T;
         nullpoToCCPieceMap[Piece.PIECE_J] = CCPiece.J;
         nullpoToCCPieceMap[Piece.PIECE_S] = CCPiece.S;
+    }
+
+    public ColdClearAI() {
+        for (int i = 0; i < 40; i++) {
+            expectedField.add(new boolean[10]);
+        }
     }
 
     @Override
@@ -56,29 +65,27 @@ public class ColdClearAI extends DummyAI {
             CCLib.INSTANCE.cc_destroy_async(bot);
             bot = null;
         }
-        movements.clear();
         dead = false;
+
+        movements.clear();
         hold = false;
         hardDrop = false;
         hardDropPressed = false;
         executor = null;
+        for (boolean[] row : expectedField) {
+            Arrays.fill(row, false);
+        }
+
         prevQueuePosition = 0;
         delay = 0;
     }
 
     @Override
     public void setControl(GameEngine engine, int playerID, Controller ctrl) {
-//        try {
-//            Thread.sleep(116);
-//        } catch (InterruptedException e) {
-//            log.error(e);
-//        }
         ctrl.reset();
         if (!dead) {
             if (executor != null) {
                 if (executor.execute(engine, ctrl)) {
-//                    log.debug("Finished:");
-//                    log.debug(executor);
                     executor = null;
                 }
             } else {
@@ -124,14 +131,54 @@ public class ColdClearAI extends DummyAI {
                 prevQueuePosition += 1;
             }
             if (movements.isEmpty() && executor == null) {
+                boolean reset = false;
+                for (int y = 0; y < 40; y++) {
+                    for (int x = 0; x < 10; x++) {
+                        boolean cell = !engine.field.getBlockEmpty(x, engine.fieldHeight - y - 1);
+                        boolean expected = expectedField.get(y)[x];
+                        if (cell != expected) {
+                            expectedField.get(y)[x] = cell;
+                            reset = true;
+                        }
+                    }
+                }
+                if (reset) {
+                    byte[] field = new byte[400];
+                    for (int y = 0; y < 40; y++) {
+                        for (int x = 0; x < 10; x++) {
+                            field[y * 10 + x] = (byte)(expectedField.get(y)[x] ? 1 : 0);
+                        }
+                    }
+                    CCLib.INSTANCE.cc_reset_async(bot, field, (byte)(engine.b2b ? 1 : 0), engine.combo);
+                }
+
                 CCMove move = new CCMove();
-                CCLib.INSTANCE.cc_request_next_move(bot, 0);
+                CCLib.INSTANCE.cc_request_next_move(bot, engine.owner.mode.getGarbage(playerID));
                 dead = CCLib.INSTANCE.cc_block_next_move(bot, move, null, null) == CCBotPollStatus.BOT_DEAD;
                 if (!dead) {
                     hardDrop = true;
                     hardDropPressed = false;
                     hold = move.hold != 0;
                     movements.addAll(Arrays.asList(move.movements).subList(0, move.movement_count));
+                    for (int i = 0; i < 4; i++) {
+                        int x = move.expected_x[i];
+                        int y = move.expected_y[i];
+                        expectedField.get(y)[x] = true;
+                    }
+                    expectedField = expectedField
+                            .stream()
+                            .filter(row -> {
+                                for (boolean cell : row) {
+                                    if (!cell) {
+                                        return true;
+                                    }
+                                }
+                                return false;
+                            })
+                            .collect(Collectors.toList());
+                    while (expectedField.size() < 40) {
+                        expectedField.add(new boolean[10]);
+                    }
                 }
             }
         }

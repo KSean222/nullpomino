@@ -393,4 +393,12 @@ public interface GameMode {
 	 * @param playerID Player ID
 	 */
 	public void netplayOnRetryKey(GameEngine engine, int playerID);
+
+	/**
+	 * Get pending garbage.
+	 * @return Pending garbage.
+	 */
+	default int getGarbage(int playerID) {
+		return 0;
+	}
 }

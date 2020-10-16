@@ -1297,6 +1297,11 @@ public class VSBattleMode extends AbstractMode {
 		owner.replayProp.setProperty("vsbattle.version", version);
 	}
 
+	@Override
+	public int getGarbage(int playerID) {
+		return garbage[playerID];
+	}
+
 	/**
 	 * I was sent from the enemygarbage blockOf data
 	 */
