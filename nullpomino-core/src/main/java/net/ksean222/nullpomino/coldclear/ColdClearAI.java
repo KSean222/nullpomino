@@ -83,7 +83,7 @@ public class ColdClearAI extends DummyAI {
     @Override
     public void setControl(GameEngine engine, int playerID, Controller ctrl) {
         ctrl.reset();
-        if (!dead) {
+        if (!dead && engine.nowPieceObject != null) {
             if (executor != null) {
                 if (executor.execute(engine, ctrl)) {
                     executor = null;
@@ -130,7 +130,9 @@ public class ColdClearAI extends DummyAI {
                 CCLib.INSTANCE.cc_add_next_piece_async(bot, nullpoToCCPieceMap[piece]);
                 prevQueuePosition += 1;
             }
-            if (movements.isEmpty() && executor == null) {
+            if (!engine.holdDisable) {
+                movements.clear();
+                executor = null;
                 boolean reset = false;
                 for (int y = 0; y < 40; y++) {
                     for (int x = 0; x < 10; x++) {
