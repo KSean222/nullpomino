@@ -84,11 +84,7 @@ public class ColdClearAI extends DummyAI {
     public void setControl(GameEngine engine, int playerID, Controller ctrl) {
         ctrl.reset();
         if (!dead && engine.nowPieceObject != null) {
-            if (executor != null) {
-                if (executor.execute(engine, ctrl)) {
-                    executor = null;
-                }
-            } else {
+            if (executor == null) {
                 if (delay < 0) {
                     delay += 1;
                 } else {
@@ -117,6 +113,11 @@ public class ColdClearAI extends DummyAI {
                         }
                     }
                     delay = 0;
+                }
+            }
+            if (executor != null) {
+                if (executor.execute(engine, ctrl)) {
+                    executor = null;
                 }
             }
         }
